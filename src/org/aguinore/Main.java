@@ -1,10 +1,9 @@
 package org.aguinore;
 
-public class Main {
-
-    private static String pathToFiles;
+class Main {
 
     public static void main(String[] args) {
+        String pathToFiles;
         if (args != null && args.length == 1) {
             pathToFiles = args[0];
         } else {

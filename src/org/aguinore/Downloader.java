@@ -6,14 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class Downloader {
+class Downloader {
     private final String pathToFiles;
 
-    public Downloader(String pathToFiles) {
+    Downloader(String pathToFiles) {
         this.pathToFiles = pathToFiles;
     }
 
-    public void saveDocs() {
+    void saveDocs() {
         File baseDir = new File(pathToFiles);
         if (!baseDir.isDirectory()) {
             throw new IllegalArgumentException("Provided path must be a directory");
