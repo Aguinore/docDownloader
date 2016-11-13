@@ -1,6 +1,11 @@
 package org.aguinore;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 class Downloader {
     private final String pathToFiles;
@@ -50,8 +55,29 @@ class Downloader {
             int questionMarkIndex = line.indexOf("?");
             if (questionMarkIndex > 0) {
                 docLink = line.substring(index + pattern.length(), questionMarkIndex);
+                int startOfFileName = docLink.lastIndexOf("/") + 1;
+                String fileName = docLink.substring(startOfFileName);
                 System.out.println(docLink);
+                saveDoc(docLink, fileName);
             }
+        }
+    }
+
+    private void saveDoc(String docLink, String fileNameTosave) {
+        URL url = null;
+
+        try {
+            url = new URL(docLink);
+            InputStream in = url.openStream();
+            String placeToSave = pathToFiles + File.separator + Paths.get(fileNameTosave);
+            System.out.println("saving to " + placeToSave);
+            Files.copy(in, Paths.get(placeToSave), StandardCopyOption.REPLACE_EXISTING);
+            in.close();
+        } catch (MalformedURLException mue) {
+            System.err.println("URL not found " + docLink);
+        } catch (IOException ioe) {
+            System.err.println("Something got wrong with opening stream from url " + url.getPath() + ": ");
+            ioe.printStackTrace();
         }
     }
 }
