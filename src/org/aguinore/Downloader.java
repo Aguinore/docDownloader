@@ -1,10 +1,6 @@
 package org.aguinore;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.io.*;
 
 class Downloader {
     private final String pathToFiles;
@@ -26,26 +22,34 @@ class Downloader {
 
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".html")) {
-                parseHtmlFile(file.getName());
+                parseHtmlFile(file.getAbsolutePath());
             }
         }
     }
 
     private void parseHtmlFile(String fileName) {
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(this::parseHtmlLine);
-        } catch (IOException e) {
-            System.err.println("Something got wrong with file " + fileName + ": " + e.getMessage());
+        System.out.println(fileName);
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+               parseHtmlLine(line);
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("File not found " + fileName);
+        } catch (IOException ex) {
+            System.err.println("Something got wrong with file " + fileName + ": ");
+            ex.printStackTrace();
         }
     }
 
     private void parseHtmlLine(String line) {
         String docLink;
-        int index = line.indexOf("iframe\" src=\"");
+        String pattern = "iframe\" src=\"";
+        int index = line.indexOf(pattern);
         if (index > 0) {
             int questionMarkIndex = line.indexOf("?");
             if (questionMarkIndex > 0) {
-                docLink = line.substring(index, questionMarkIndex - 1);
+                docLink = line.substring(index + pattern.length(), questionMarkIndex);
                 System.out.println(docLink);
             }
         }
