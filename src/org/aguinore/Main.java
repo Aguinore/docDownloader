@@ -13,5 +13,6 @@ public class Main {
         }
 
         Downloader downloader  = new Downloader(pathToFiles);
+        downloader.saveDocs();
     }
 }
