@@ -6,6 +6,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 class Downloader {
     private final String pathToFiles;
@@ -56,11 +58,21 @@ class Downloader {
             if (questionMarkIndex > 0) {
                 docLink = line.substring(index + pattern.length(), questionMarkIndex);
                 int startOfFileName = docLink.lastIndexOf("/") + 1;
-                String fileName = docLink.substring(startOfFileName);
+                String fileName = renameFile(docLink.substring(startOfFileName));
                 System.out.println(docLink);
                 saveDoc(docLink, fileName);
             }
         }
+    }
+
+    private String renameFile(String fileName) {
+        String stopThePress = "_vk_com_stopthepress";
+        String correctedName = fileName.replace(stopThePress, "");
+        while(correctedName.contains("__")) {
+            correctedName = correctedName.replaceAll("__", "_");
+        }
+        correctedName = correctedName.replaceAll("_", " ");
+        return correctedName;
     }
 
     private void saveDoc(String docLink, String fileNameTosave) {
