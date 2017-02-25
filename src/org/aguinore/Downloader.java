@@ -6,8 +6,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.Map;
 
 class Downloader {
     private final String pathToFiles;
@@ -28,7 +26,8 @@ class Downloader {
         }
 
         for (File file : files) {
-            if (file.isFile() && file.getName().endsWith(".html")) {
+            System.out.println(file.getPath() + " is file: " + file.isFile());
+            if (file.isFile() && (file.getName().endsWith(".html") || file.getName().endsWith(".htm"))) {
                 parseHtmlFile(file.getAbsolutePath());
             }
         }
