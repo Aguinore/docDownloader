@@ -26,7 +26,6 @@ class Downloader {
         }
 
         for (File file : files) {
-            System.out.println(file.getPath() + " is file: " + file.isFile());
             if (file.isFile() && (file.getName().endsWith(".html") || file.getName().endsWith(".htm"))) {
                 parseHtmlFile(file.getAbsolutePath());
             }
@@ -65,8 +64,7 @@ class Downloader {
     }
 
     private String renameFile(String fileName) {
-        String stopThePress = "_vk_com_stopthepress";
-        String correctedName = fileName.replace(stopThePress, "");
+        String correctedName = fileName;
         while(correctedName.contains("__")) {
             correctedName = correctedName.replaceAll("__", "_");
         }
